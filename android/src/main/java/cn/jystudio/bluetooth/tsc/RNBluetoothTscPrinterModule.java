@@ -3,6 +3,7 @@ package cn.jystudio.bluetooth.tsc;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import cn.jystudio.bluetooth.BluetoothService;
 import cn.jystudio.bluetooth.BluetoothServiceStateObserver;
 import com.facebook.react.bridge.*;
@@ -97,8 +98,9 @@ implements BluetoothServiceStateObserver{
             boolean bold = text.hasKey("bold") && text.getBoolean("bold");
 
             try {
-                byte[] temp = t.getBytes("UTF-8");
-                String temStr = new String(temp, "UTF-8");
+                String encoding = getEncoding(text.getString("fonttype"));
+                byte[] temp = t.getBytes(encoding);
+                String temStr = new String(temp, encoding);
                 t = new String(temStr.getBytes("GB2312"), "GB2312");//打印的文字
             } catch (Exception e) {
                 promise.reject("INVALID_TEXT", e);
@@ -296,6 +298,15 @@ implements BluetoothServiceStateObserver{
         }
         mService.write(data);
         return true;
+    }
+
+    private String getEncoding(String fontType){
+        Log.d("GET ENCODING METHOD");
+        String encoding = "UTF-8";
+        if(fontType.equals("K")) {
+            encoding = "EUC-KR";
+        }        
+        return encoding;
     }
 
     @Override
