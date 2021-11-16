@@ -35,6 +35,7 @@ implements BluetoothServiceStateObserver{
         int width = options.getInt("width");
         int height = options.getInt("height");
         int gap = options.hasKey("gap") ? options.getInt("gap") : 0;
+        String textEncoding = options.hasKey("textEncoding") ? options.getString("textEncoding") : "";
         TscCommand.SPEED speed = options.hasKey("speed")?this.findSpeed(options.getInt("speed")):null;
         TscCommand.ENABLE enable = options.hasKey("tear") ?
                 options.getString("tear").equalsIgnoreCase(TscCommand.ENABLE.ON.getValue()) ? TscCommand.ENABLE.ON : TscCommand.ENABLE.OFF
@@ -85,6 +86,9 @@ implements BluetoothServiceStateObserver{
             tsc.addHome();//走纸到开始位置
         }
         tsc.addCls();// 清除打印缓冲区
+        if(textEncoding.equals("KR")) {
+            tsc.addCodePageV2(TscCommand.CODEPAGE_STRING.WPC949);
+        }
         //绘制简体中文
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
@@ -101,14 +105,21 @@ implements BluetoothServiceStateObserver{
                 String encoding = getEncoding(text.getString("fonttype"));
                 byte[] temp = t.getBytes(encoding);
                 String temStr = new String(temp, encoding);
-                t = new String(temStr.getBytes("GB2312"), "GB2312");//打印的文字
+                String tempEnc = "GB2312";
+                if(textEncoding.equals("KR")){
+                    t = new String(temStr.getBytes("UTF8"), "UTF8");//打印的文字
+                } else {
+                    t = new String(temStr.getBytes("GB2312"), "GB2312");//打印的文字
+                }
+                
             } catch (Exception e) {
                 promise.reject("INVALID_TEXT", e);
                 return;
             }
-
+            
             tsc.addText(x, y, fonttype/*字体类型*/,
-                    rotation/*旋转角度*/, xscal/*横向放大*/, yscal/*纵向放大*/, t);
+                rotation/*旋转角度*/, xscal/*横向放大*/, yscal/*纵向放大*/, t);
+            
 
             if(bold){
                 tsc.addText(x+1, y, fonttype,
@@ -181,11 +192,20 @@ implements BluetoothServiceStateObserver{
         for(int i=0;i<bytes.size();i++){
             tosend[i]= bytes.get(i);
         }
-        if(sendDataByte(tosend)){
-            promise.resolve(null);
-        }else{
-            promise.reject("COMMAND_SEND_ERROR");
+        if(textEncoding.equals("KR")){
+            if(sendDataByteKR(tosend)){
+                promise.resolve(null);
+            }else{
+                promise.reject("COMMAND_SEND_ERROR");
+            }
+        } else {
+            if(sendDataByte(tosend)){
+                promise.resolve(null);
+            }else{
+                promise.reject("COMMAND_SEND_ERROR");
+            }
         }
+        
     }
 
     private TscCommand.BARCODETYPE findBarcodeType(String type) {
@@ -300,12 +320,16 @@ implements BluetoothServiceStateObserver{
         return true;
     }
 
+    private boolean sendDataByteKR(byte[] data) {
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            return false;
+        }
+        mService.write(data);
+        return true;
+    }
+
     private String getEncoding(String fontType){
-        Log.d("TSCModule","GET ENCODING METHOD");
-        String encoding = "UTF-8";
-        if(fontType.equals("K")) {
-            encoding = "EUC-KR";
-        }        
+        String encoding = "UTF-8";   
         return encoding;
     }
 

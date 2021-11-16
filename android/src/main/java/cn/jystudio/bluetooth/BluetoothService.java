@@ -170,6 +170,16 @@ public class BluetoothService {
         }
         r.write(out);
     }
+    public void writeKR(byte[] out) {
+        // Create temporary object
+        ConnectedThread r;
+        // Synchronize a copy of the ConnectedThread
+        synchronized (this) {
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        r.writeKR(out);
+    }
 
     /**
      * Indicate that the connection attempt failed.
@@ -324,6 +334,24 @@ public class BluetoothService {
                   SPPReadTimeout(readata, 1, 5000);
                 }*/
                 Log.i("BTPWRITE", new String(buffer, "GBK"));
+                Map<String, Object> bundle = new HashMap<String, Object>();
+                bundle.put("bytes", buffer);
+                infoObervers(MESSAGE_WRITE, bundle);
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during write", e);
+            }
+        }
+
+        public void writeKR(byte[] buffer) {
+            try {
+                mmOutStream.write(buffer);
+                mmOutStream.flush();//清空缓存
+               /* if (buffer.length > 3000) //
+                {
+                  byte[] readata = new byte[1];
+                  SPPReadTimeout(readata, 1, 5000);
+                }*/
+                Log.i("BTPWRITE", new String(buffer, "UTF-8"));
                 Map<String, Object> bundle = new HashMap<String, Object>();
                 bundle.put("bytes", buffer);
                 infoObervers(MESSAGE_WRITE, bundle);

@@ -112,6 +112,22 @@ public class TscCommand {
         }
     }
 
+    public static enum CODEPAGE_STRING {
+        PC437("437"), PC850("850"), PC852("852"), PC860("860"), PC863("863"), 
+        PC865("865"), WPC1250("1250"), WPC1252("1252"), WPC1253("1253"), WPC1254("1254"), WPC949("949");
+
+
+        private CODEPAGE_STRING(String value) {
+            this.value = value;
+        }
+
+        private final String value;
+
+        public String getValue() {
+            return this.value;
+        }
+    }
+
     public static enum FONTMUL {
         MUL_1(1), MUL_2(2), MUL_3(3), MUL_4(4), MUL_5(5), MUL_6(6), MUL_7(7), MUL_8(8), MUL_9(9), MUL_10(10);
 
@@ -242,6 +258,20 @@ public class TscCommand {
         }
     }
 
+    private void addStrToCommandKorean(String str) {
+        byte[] bs = null;
+        if (!str.equals("")) {
+            try {
+                bs = str.getBytes("UTF8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < bs.length; i++) {
+                this.Command.add(Byte.valueOf(bs[i]));
+            }
+        }
+    }
+
     public void addGap(int gap) {
         String str = new String();
         str = "GAP " + gap + " mm," + 0 + " mm" + "\r\n";
@@ -338,6 +368,12 @@ public class TscCommand {
         addStrToCommand(str);
     }
 
+    public void addCodePageV2(CODEPAGE_STRING page) {
+        String str = new String();
+        str = "CODEPAGE " + page.getValue() + "\r\n";
+        addStrToCommand(str);
+    }
+
     public void addSound(int level, int interval) {
         String str = new String();
         str = "SOUND " + level + "," + interval + "\r\n";
@@ -363,6 +399,18 @@ public class TscCommand {
     }
 
     public void addText(int x, int y, FONTTYPE font, ROTATION rotation, FONTMUL Xscal, FONTMUL Yscal, String text) {
+        String str = new String();
+        str = "TEXT " + x + "," + y + "," + "\"" + font.getValue() + "\"" + "," + rotation.getValue() + ","
+                + Xscal.getValue() + "," + Yscal.getValue() + "," + "\"" + text + "\"" + "\r\n";
+        if(font.getValue().equals("K")){
+            addStrToCommandKorean(str);
+        } else {
+            addStrToCommand(str);
+        }
+        
+    }
+
+    public void addTextKorean(int x, int y, FONTTYPE font, ROTATION rotation, FONTMUL Xscal, FONTMUL Yscal, String text) {
         String str = new String();
         str = "TEXT " + x + "," + y + "," + "\"" + font.getValue() + "\"" + "," + rotation.getValue() + ","
                 + Xscal.getValue() + "," + Yscal.getValue() + "," + "\"" + text + "\"" + "\r\n";
