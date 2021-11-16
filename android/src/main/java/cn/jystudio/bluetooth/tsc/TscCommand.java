@@ -403,8 +403,10 @@ public class TscCommand {
         str = "TEXT " + x + "," + y + "," + "\"" + font.getValue() + "\"" + "," + rotation.getValue() + ","
                 + Xscal.getValue() + "," + Yscal.getValue() + "," + "\"" + text + "\"" + "\r\n";
         if(font.getValue().equals("K")){
+            Log.d("AddTextKR","MASUK SINI DONG ABANG");
             addStrToCommandKorean(str);
         } else {
+            Log.d("AddText","MASUK SINI DONG ABANG");
             addStrToCommand(str);
         }
         
