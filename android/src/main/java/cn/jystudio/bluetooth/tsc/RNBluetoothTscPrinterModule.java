@@ -301,7 +301,7 @@ implements BluetoothServiceStateObserver{
     }
 
     private String getEncoding(String fontType){
-        Log.D("GET ENCODING METHOD");
+        Log.d("TSCModule","GET ENCODING METHOD");
         String encoding = "UTF-8";
         if(fontType.equals("K")) {
             encoding = "EUC-KR";
