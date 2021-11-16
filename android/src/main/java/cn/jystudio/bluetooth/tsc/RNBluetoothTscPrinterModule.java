@@ -107,7 +107,7 @@ implements BluetoothServiceStateObserver{
                 String temStr = new String(temp, encoding);
                 String tempEnc = "GB2312";
                 if(textEncoding.equals("KR")){
-                    t = new String(temStr.getBytes("UTF8"), "UTF8");//打印的文字
+                    t = new String(temStr.getBytes("UTF-8"), "UTF-8");//打印的文字
                 } else {
                     t = new String(temStr.getBytes("GB2312"), "GB2312");//打印的文字
                 }
