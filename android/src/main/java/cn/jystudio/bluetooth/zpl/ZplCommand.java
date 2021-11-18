@@ -1,4 +1,4 @@
-package cn.jystudio.bluetooth.tsc;
+package cn.jystudio.bluetooth.zpl;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -242,7 +242,7 @@ public class ZplCommand {
 
     public void addStartCommand() {
         String str = new String();
-        str = "^XA\r\n";
+        str = "^XA\r\n^LL240";
         addStrToCommand(str);
     }
 
@@ -252,10 +252,16 @@ public class ZplCommand {
         addStrToCommand(str);
     }
 
-    public void addText(String fontType, String fontSize, String text) {
+    public void addText(String fontType, String fontSize, String x, String y, String text) {
         String str = new String();
-        str = "^CF"+fontType","+fontSize+"\r\n"+"^FO50,420^FD"+text+"^FS";
-        addStrToCommand(str)
+        str = "^CF"+fontType+","+fontSize+"\r\n"+"^FO"+x+","+y+"^FD"+text+"^FS\r\n";
+        addStrToCommand(str);
+    }
+
+    public void addFieldBlock(String fieldBlock) {
+        String str = new String();
+        str = "^FB"+fieldBlock+"\r\n";
+        addStrToCommand(str);
     }
 
     // public void clrCommand() {
@@ -266,7 +272,7 @@ public class ZplCommand {
         byte[] bs = null;
         if (!str.equals("")) {
             try {
-                bs = str.getBytes("GB2312");
+                bs = str.getBytes("UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -519,9 +525,9 @@ public class ZplCommand {
     //     addStrToCommand(str);
     // }
 
-    // public Vector<Byte> getCommand() {
-    //     return this.Command;
-    // }
+    public Vector<Byte> getCommand() {
+        return this.Command;
+    }
 
     // public void queryPrinterType() {
     //     String str = new String();
