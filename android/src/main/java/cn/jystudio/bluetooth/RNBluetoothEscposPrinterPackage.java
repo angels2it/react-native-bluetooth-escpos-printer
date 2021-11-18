@@ -7,7 +7,7 @@ import java.util.List;
 
 import cn.jystudio.bluetooth.escpos.RNBluetoothEscposPrinterModule;
 import cn.jystudio.bluetooth.tsc.RNBluetoothTscPrinterModule;
-import cn.jystudio.bluetooth.tsc.RNBluetoothZplPrinterModule;
+import cn.jystudio.bluetooth.zpl.RNBluetoothZplPrinterModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
