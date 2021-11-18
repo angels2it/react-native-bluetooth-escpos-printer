@@ -20,7 +20,7 @@ public class RNBluetoothEscposPrinterPackage implements ReactPackage {
         BluetoothService service = new BluetoothService(reactContext);
         return Arrays.<NativeModule>asList(new RNBluetoothManagerModule(reactContext, service),
                 new RNBluetoothEscposPrinterModule(reactContext, service),
-                new RNBluetoothTscPrinterModule(reactContext, service));
+                new RNBluetoothTscPrinterModule(reactContext, service),
                 new RNBluetoothZplPrinterModule(reactContext, service));
     }
 
