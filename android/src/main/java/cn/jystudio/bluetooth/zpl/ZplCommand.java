@@ -240,9 +240,9 @@ public class ZplCommand {
         // addGap(gap);
     }
 
-    public void addStartCommand() {
+    public void addStartCommand(String labelLength) {
         String str = new String();
-        str = "^XA\r\n^LL240";
+        str = "^XA\r\n^LL"+labelLength+"\r\n";
         addStrToCommand(str);
     }
 
