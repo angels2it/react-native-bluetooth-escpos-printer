@@ -34,13 +34,8 @@ implements BluetoothServiceStateObserver{
     public void printLabel(final ReadableMap options, final Promise promise) {
         ZplCommand zpl = new ZplCommand();
         ReadableArray texts = options.hasKey("text")? options.getArray("text"):null;
-        int totalOrderQty = options.hasKey("totalOrderQuantity")? options.getInt("totalOrderQuantity"):0;
-        int labelLength = 250;
-        int additionalLabelLengthPerItem = 5;
-        labelLength = labelLength + additionalLabelLengthPerItem * totalOrderQty;
-        Integer dataLabelLength = new Integer(labelLength);
         zpl.addStartCommand();
-        zpl.addLabelPositioning(dataLabelLength.toString(),"270","30");
+        zpl.addLabelPositioning("250","270","30");
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
             String t = text.getString("text");
