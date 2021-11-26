@@ -240,7 +240,7 @@ public class ZplCommand {
         // addGap(gap);
     }
 
-    public void addStartCommand(String labelLength) {
+    public void addStartCommand() {
         String str = new String();
         str = "^XA\r\n"+"^CW1,E:ANMDS.FNT^FS\r\n^CI28"; // for printing in UTF-8 support all asian character, also need to make sure to installed the font into the printer
         addStrToCommand(str);
@@ -258,7 +258,7 @@ public class ZplCommand {
         addStrToCommand(str);
     }
 
-    public void addText(String fontType, String fontSize, String x, String y, String text) {
+    public void addText(String fontSize, String x, String y, String text) {
         String str = new String();
         str = "^FT"+x+","+y+"^A1,"+fontSize+","+fontSize+"^FD"+text+"^FS\r\n";
         addStrToCommand(str);

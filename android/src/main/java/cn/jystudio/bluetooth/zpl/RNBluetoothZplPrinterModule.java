@@ -35,15 +35,15 @@ implements BluetoothServiceStateObserver{
         ZplCommand zpl = new ZplCommand();
         ReadableArray texts = options.hasKey("text")? options.getArray("text"):null;
         int totalOrderQty = options.hasKey("totalOrderQuantity")? options.getInt("totalOrderQuantity"):0;
-        int labelLength = 230;
+        int labelLength = 250;
         int additionalLabelLengthPerItem = 5;
         labelLength = labelLength + additionalLabelLengthPerItem * totalOrderQty;
         Integer dataLabelLength = new Integer(labelLength);
-        zpl.addStartCommand(dataLabelLength.toString());
+        zpl.addStartCommand();
+        zpl.addLabelPositioning(dataLabelLength.toString(),"270","30");
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
             String t = text.getString("text");
-            String fontType = text.getString("fontType");
             String fontSize = text.getString("fontSize");
             String x = text.getString("x");
             String y = text.getString("y");
@@ -61,7 +61,7 @@ implements BluetoothServiceStateObserver{
                 return;
             }
             
-            zpl.addText(fontType,fontSize,x,y,t);
+            zpl.addText(fontSize,x,y,t);
         }
         zpl.addEndCommand();
         Vector<Byte> bytes = zpl.getCommand();
