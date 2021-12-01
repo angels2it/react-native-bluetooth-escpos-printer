@@ -261,6 +261,7 @@ public class ZplCommand {
     public void addText(String fontSize, String x, String y, String text) {
         String str = new String();
         str = "^FT"+x+","+y+"^A1,"+fontSize+","+fontSize+"^FD"+text+"^FS\r\n";
+        
         addStrToCommand(str);
     }
 
