@@ -35,7 +35,7 @@ implements BluetoothServiceStateObserver{
         ZplCommand zpl = new ZplCommand();
         ReadableArray texts = options.hasKey("text")? options.getArray("text"):null;
         zpl.addStartCommand();
-        zpl.addLabelPositioning("250","240","30");
+        zpl.addLabelPositioning("252","220","20");
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
             String t = text.getString("text");
