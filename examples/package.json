@@ -21,5 +21,11 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "react-native": {
+    "crypto": "react-native-crypto"
+  },
+  "browser": {
+    "crypto": "react-native-crypto"
   }
 }

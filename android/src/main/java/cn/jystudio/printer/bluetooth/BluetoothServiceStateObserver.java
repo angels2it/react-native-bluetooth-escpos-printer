@@ -1,4 +1,4 @@
-package cn.jystudio.bluetooth;
+package cn.jystudio.printer.bluetooth;
 
 import java.util.Map;
 

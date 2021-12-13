@@ -1,5 +1,5 @@
 
-package cn.jystudio.bluetooth;
+package cn.jystudio.printer.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

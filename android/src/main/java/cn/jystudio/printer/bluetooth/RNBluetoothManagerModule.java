@@ -1,4 +1,4 @@
-package cn.jystudio.bluetooth;
+package cn.jystudio.printer.bluetooth;
 
 
 import android.app.Activity;
@@ -301,7 +301,7 @@ public class RNBluetoothManagerModule extends ReactContextBaseJavaModule
 
 
 
-        private void unpairDevice(BluetoothDevice device) {
+    private void unpairDevice(BluetoothDevice device) {
         try {
             Method m = device.getClass()
                     .getMethod("removeBond", (Class[]) null);

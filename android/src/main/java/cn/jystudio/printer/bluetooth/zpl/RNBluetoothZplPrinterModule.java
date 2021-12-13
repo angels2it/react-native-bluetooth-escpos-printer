@@ -1,11 +1,11 @@
-package cn.jystudio.bluetooth.zpl;
+package cn.jystudio.printer.bluetooth.zpl;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
-import cn.jystudio.bluetooth.BluetoothService;
-import cn.jystudio.bluetooth.BluetoothServiceStateObserver;
+import cn.jystudio.printer.bluetooth.BluetoothService;
+import cn.jystudio.printer.bluetooth.BluetoothServiceStateObserver;
 import com.facebook.react.bridge.*;
 
 import java.util.Map;

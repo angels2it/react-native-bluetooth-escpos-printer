@@ -1,8 +1,8 @@
-package cn.jystudio.bluetooth.zpl;
+package cn.jystudio.printer.bluetooth.zpl;
 
 import android.graphics.Bitmap;
 import android.util.Log;
-import cn.jystudio.bluetooth.escpos.command.sdk.PrintPicture;
+import cn.jystudio.printer.bluetooth.escpos.command.sdk.PrintPicture;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;

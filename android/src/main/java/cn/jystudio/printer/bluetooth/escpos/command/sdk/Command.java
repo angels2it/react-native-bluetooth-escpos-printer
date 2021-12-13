@@ -1,4 +1,4 @@
-package cn.jystudio.bluetooth.escpos.command.sdk;
+package cn.jystudio.printer.bluetooth.escpos.command.sdk;
 
 public class Command {
 

@@ -17,5 +17,11 @@
   "license": "MIT",
   "peerDependencies": {
     "react-native": ">=0.55.4"
+  },
+  "react-native": {
+    "crypto": "react-native-crypto"
+  },
+  "browser": {
+    "crypto": "react-native-crypto"
   }
 }
