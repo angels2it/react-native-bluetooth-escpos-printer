@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
-import cn.jystudio.printer.network.command.ZplCommand;
+import cn.jystudio.printer.network.command.TscCommand;
 import com.facebook.react.bridge.*;
 
 import java.util.Map;
@@ -16,60 +16,52 @@ import java.io.IOException;
 /**
  * Created by kape on 2021/11/17.
  */
-public class ZplPrinter {
+public class TscPrinter {
     private Socket mmSocket;
     private final ReadableMap options;
     private String labelSize;
-    public ZplPrinter(Socket connectedSocket, final ReadableMap options, String labelSize) {
+    public TscPrinter(Socket connectedSocket, final ReadableMap options, String labelSize) {
         this.mmSocket = connectedSocket;
         this.options = options;
         this.labelSize = labelSize;
     }
 
     public boolean printLabel() {
-        ZplCommand zpl = new ZplCommand();
+        TscCommand tsc = new TscCommand();
         ReadableArray texts = options.hasKey("text")? options.getArray("text"):null;
-        zpl.addStartCommand();
-        switch(this.labelSize) {
-            case "40mmx30mm":
-                zpl.addLabelPositioning("252","210","20");
-                break;
-            case "58mmx30mm":
-                zpl.addLabelPositioning("252","210","20");
-                break;
-            case "50mmx40mm":
-                zpl.addLabelPositioning("252","210","20");
-                break;
-            default:
-                zpl.addLabelPositioning("252","210","20");
-                break;
-        }
-        //zpl.addLabelPositioning("252","210","20");
+        String lbSize = options.hasKey("size")? options.getString("size"):"SIZE 40mm,30mm";
+        String lbGap = options.hasKey("gap")? options.getString("gap"):"GAP 3mm";
+        String lbDirection = options.hasKey("direction")? options.getString("direction"):"DIRECTION 1";
+        tsc.addStartCommand(lbSize,lbGap,lbDirection);
+        //tsc.addLabelPositioning("252","210","20");
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
             String t = text.getString("text");
-            String fontSize = text.getString("fontSize");
+            String fontType = text.getString("fontType");
             String x = text.getString("x");
             String y = text.getString("y");
             String fieldBlock = text.hasKey("fieldBlock") ? text.getString("fieldBlock") : "";
-            if (fieldBlock!="") {
-                zpl.addFieldBlock(fieldBlock);
-            }
+            
             try {
-                byte[] temp = t.getBytes("UTF-8");
-                String temStr = new String(temp, "UTF-8");
-                t = new String(temStr.getBytes("UTF-8"), "UTF-8");//打印的文字
-                Log.d("ZPLPrinter",t);
+                byte[] temp = t.getBytes("GB2312");
+                String temStr = new String(temp, "GB2312");
+                t = new String(temStr.getBytes("GB2312"), "GB2312");//打印的文字
+                Log.d("tscPrinter",t);
             } catch (Exception e) {
                 //promise.reject("INVALID_TEXT", e);
                 //mmSocket.close();
                 return false;
             }
+
+            if (fieldBlock!=""){
+                tsc.addFieldBlock(fieldBlock,x,y,fontType,t);
+            } else {
+                tsc.addText(x,y,fontType,t);
+            }
             
-            zpl.addText(fontSize,x,y,t);
         }
-        zpl.addEndCommand();
-        Vector<Byte> bytes = zpl.getCommand();
+        tsc.addEndCommand();
+        Vector<Byte> bytes = tsc.getCommand();
         byte[] tosend = new byte[bytes.size()];
         for(int i=0;i<bytes.size();i++){
             tosend[i]= bytes.get(i);

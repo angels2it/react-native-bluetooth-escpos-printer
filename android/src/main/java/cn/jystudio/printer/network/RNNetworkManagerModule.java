@@ -87,9 +87,8 @@ public class RNNetworkManagerModule extends ReactContextBaseJavaModule
     // private BluetoothService mService = null;
     private Socket mPrinterSocket = null;
 
-    private static final String COMMAND_LANGUAGE_ZPL = "ZPL";
-    private static final String COMMAND_LANGUAGE_TSC = "TSC";
-    private static final String COMMAND_LANGUAGE_ESCPOS = "ESCPOS";
+    private static final String PRINTER_HW_RP2_RP4 = "Honeywell RP2/RP4";
+    private static final String PRINTER_TSC_TDP_225 = "TSC TDP 225";
 
     public RNNetworkManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -139,13 +138,21 @@ public class RNNetworkManagerModule extends ReactContextBaseJavaModule
     }
 
     @ReactMethod
-    public void printLabel(String ipAddress, int port, String commandLanguage, final ReadableMap options, final Promise promise) {
+    public void printLabel(String ipAddress, int port, String commandLanguage, final ReadableMap options, String labelSize, final Promise promise) {
         try {
             Socket socket = new Socket(ipAddress, port);
             if (socket.isConnected()) {
+                boolean result;
                 switch(commandLanguage) {
-                    case COMMAND_LANGUAGE_ZPL:
-                        boolean result = printInZpl(socket, options);
+                    case PRINTER_HW_RP2_RP4:
+                        result = printInZpl(socket, options, labelSize);
+                        if(result) {
+                            promise.resolve(null);
+                        } else
+                            promise.reject("COMMAND_SEND_ERROR");
+                        break;
+                    case PRINTER_TSC_TDP_225:
+                        result = printInTsc(socket, options, labelSize);
                         if(result) {
                             promise.resolve(null);
                         } else
@@ -220,8 +227,14 @@ public class RNNetworkManagerModule extends ReactContextBaseJavaModule
         }
     }
 
-    private boolean printInZpl(Socket connectedSocket, final ReadableMap options) {
-        ZplPrinter printer = new ZplPrinter(connectedSocket,options);
+    private boolean printInZpl(Socket connectedSocket, final ReadableMap options, String labelSize) {
+        ZplPrinter printer = new ZplPrinter(connectedSocket,options,labelSize);
+        boolean result = printer.printLabel();
+        return result;
+    }
+
+    private boolean printInTsc(Socket connectedSocket, final ReadableMap options, String labelSize) {
+        TscPrinter printer = new TscPrinter(connectedSocket,options,labelSize);
         boolean result = printer.printLabel();
         return result;
     }
