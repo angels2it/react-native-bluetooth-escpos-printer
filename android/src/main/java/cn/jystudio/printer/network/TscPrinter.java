@@ -41,7 +41,7 @@ public class TscPrinter {
             String x = text.getString("x");
             String y = text.getString("y");
             String fieldBlock = text.hasKey("fieldBlock") ? text.getString("fieldBlock") : "";
-            
+            String fontMultiplier = text.hasKey("fontMultiplier") ? text.getString("fontMultiplier"): "1,1"; 
             try {
                 byte[] temp = t.getBytes("GB2312");
                 String temStr = new String(temp, "GB2312");
@@ -54,9 +54,9 @@ public class TscPrinter {
             }
 
             if (fieldBlock!=""){
-                tsc.addFieldBlock(fieldBlock,x,y,fontType,t);
+                tsc.addFieldBlock(fieldBlock,x,y,fontType,fontMultiplier,t);
             } else {
-                tsc.addText(x,y,fontType,t);
+                tsc.addText(x,y,fontType,fontMultiplier,t);
             }
             
         }

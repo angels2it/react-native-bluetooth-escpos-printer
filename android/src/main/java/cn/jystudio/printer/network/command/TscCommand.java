@@ -56,15 +56,15 @@ public class TscCommand {
         addPrint();
     }
 
-    public void addText(String x, String y, String type, String text) {
+    public void addText(String x, String y, String type, String multiplier, String text) {
         String str = new String();
-        str = "TEXT "+x+","+y+",\""+type+"\",0,1,1,0,"+"\""+text+"\"\r\n";
+        str = "TEXT "+x+","+y+",\""+type+"\",0,"+multiplier+",0,"+"\""+text+"\"\r\n";
         addStrToCommand(str);
     }
 
-    public void addFieldBlock(String fieldBlock,String x, String y, String type, String text) {
+    public void addFieldBlock(String fieldBlock,String x, String y, String type, String multiplier, String text) {
         String str = new String();
-        str = "BLOCK "+x+","+y+","+fieldBlock+",\""+type+"\",0,1,1,\""+text+"\"\r\n";
+        str = "BLOCK "+x+","+y+","+fieldBlock+",\""+type+"\",0,"+multiplier+",\""+text+"\"\r\n";
         addStrToCommand(str);
     }
 
