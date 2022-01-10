@@ -19,61 +19,61 @@ public class TscCommand {
         this.Command = new Vector(4096, 1024);
     }
 
-    public void addStartCommand(String size,String gap, String direction) {
-        addSize(size);
-        addGap(gap);
-        addDirection(direction);
-        addCls();
+    public void addStartCommand(String size,String gap, String direction, String fontEncoding) {
+        addSize(size,fontEncoding);
+        addGap(gap,fontEncoding);
+        addDirection(direction,fontEncoding);
+        addCls(fontEncoding);
     }
-    public void addSize(String size) {
+    public void addSize(String size, String fontEncoding) {
         String str = new String();
         str = size+"\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
-    public void addGap(String gap) {
+    public void addGap(String gap, String fontEncoding) {
         String str = new String();
         str = gap+"\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
-    public void addDirection(String direction) {
+    public void addDirection(String direction, String fontEncoding) {
         String str = new String();
         str = direction+"\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
-    public void addCls() {
+    public void addCls(String fontEncoding) {
         String str = new String();
         str = "CLS\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
 
-    public void addPrint() {
+    public void addPrint(String fontEncoding) {
         String str = new String();
         str = "PRINT 1,1\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
 
-    public void addEndCommand() {
-        addPrint();
+    public void addEndCommand(String fontEncoding) {
+        addPrint(fontEncoding);
     }
 
-    public void addText(String x, String y, String type, String multiplier, String text) {
+    public void addText(String x, String y, String type, String multiplier, String text, String fontEncoding) {
         String str = new String();
         str = "TEXT "+x+","+y+",\""+type+"\",0,"+multiplier+",0,"+"\""+text+"\"\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
 
-    public void addFieldBlock(String fieldBlock,String x, String y, String type, String multiplier, String text) {
+    public void addFieldBlock(String fieldBlock,String x, String y, String type, String multiplier, String text, String fontEncoding) {
         String str = new String();
         str = "BLOCK "+x+","+y+","+fieldBlock+",\""+type+"\",0,"+multiplier+",\""+text+"\"\r\n";
-        addStrToCommand(str);
+        addStrToCommand(str,fontEncoding);
     }
 
-    private void addStrToCommand(String str) {
+    private void addStrToCommand(String str, String fontEncoding) {
         Log.d("ADD_STR_TO_COMMAND",str);
         byte[] bs = null;
         if (!str.equals("")) {
             try {
-                bs = str.getBytes("GB2312");
+                bs = str.getBytes(fontEncoding);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

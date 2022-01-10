@@ -32,7 +32,8 @@ public class TscPrinter {
         String lbSize = options.hasKey("size")? options.getString("size"):"SIZE 40mm,30mm";
         String lbGap = options.hasKey("gap")? options.getString("gap"):"GAP 3mm";
         String lbDirection = options.hasKey("direction")? options.getString("direction"):"DIRECTION 1";
-        tsc.addStartCommand(lbSize,lbGap,lbDirection);
+        String fontEncoding = options.hasKey("fontEncoding")? options.getString("fontEncoding"):"GB2312";
+        tsc.addStartCommand(lbSize,lbGap,lbDirection,fontEncoding);
         //tsc.addLabelPositioning("252","210","20");
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
@@ -41,11 +42,11 @@ public class TscPrinter {
             String x = text.getString("x");
             String y = text.getString("y");
             String fieldBlock = text.hasKey("fieldBlock") ? text.getString("fieldBlock") : "";
-            String fontMultiplier = text.hasKey("fontMultiplier") ? text.getString("fontMultiplier"): "1,1"; 
+            String fontMultiplier = text.hasKey("fontMultiplier") ? text.getString("fontMultiplier"): "1,1";
             try {
-                byte[] temp = t.getBytes("GB2312");
-                String temStr = new String(temp, "GB2312");
-                t = new String(temStr.getBytes("GB2312"), "GB2312");//打印的文字
+                byte[] temp = t.getBytes(fontEncoding);
+                String temStr = new String(temp, fontEncoding);
+                t = new String(temStr.getBytes(fontEncoding), fontEncoding);//打印的文字
                 Log.d("tscPrinter",t);
             } catch (Exception e) {
                 //promise.reject("INVALID_TEXT", e);
@@ -54,13 +55,13 @@ public class TscPrinter {
             }
 
             if (fieldBlock!=""){
-                tsc.addFieldBlock(fieldBlock,x,y,fontType,fontMultiplier,t);
+                tsc.addFieldBlock(fieldBlock,x,y,fontType,fontMultiplier,t,fontEncoding);
             } else {
-                tsc.addText(x,y,fontType,fontMultiplier,t);
+                tsc.addText(x,y,fontType,fontMultiplier,t,fontEncoding);
             }
             
         }
-        tsc.addEndCommand();
+        tsc.addEndCommand(fontEncoding);
         Vector<Byte> bytes = tsc.getCommand();
         byte[] tosend = new byte[bytes.size()];
         for(int i=0;i<bytes.size();i++){
