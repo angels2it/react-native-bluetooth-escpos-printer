@@ -89,6 +89,7 @@ public class RNNetworkManagerModule extends ReactContextBaseJavaModule
 
     private static final String PRINTER_HW_RP2_RP4 = "Honeywell RP2/RP4";
     private static final String PRINTER_TSC_TDP_225 = "TSC TDP 225";
+    private static final String PRINTER_BIXOLON_DX220 = "Bixolon DX220";
 
     public RNNetworkManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -153,6 +154,13 @@ public class RNNetworkManagerModule extends ReactContextBaseJavaModule
                         break;
                     case PRINTER_TSC_TDP_225:
                         result = printInTsc(socket, options, labelSize);
+                        if(result) {
+                            promise.resolve(null);
+                        } else
+                            promise.reject("COMMAND_SEND_ERROR");
+                        break;
+                    case PRINTER_BIXOLON_DX220:
+                        result = printInBixolon(socket, options, labelSize);
                         if(result) {
                             promise.resolve(null);
                         } else
@@ -235,6 +243,12 @@ public class RNNetworkManagerModule extends ReactContextBaseJavaModule
 
     private boolean printInTsc(Socket connectedSocket, final ReadableMap options, String labelSize) {
         TscPrinter printer = new TscPrinter(connectedSocket,options,labelSize);
+        boolean result = printer.printLabel();
+        return result;
+    }
+
+    private boolean printInBixolon(Socket connectedSocket, final ReadableMap options, String labelSize) {
+        BixolonPrinter printer = new BixolonPrinter(connectedSocket,options,labelSize);
         boolean result = printer.printLabel();
         return result;
     }
