@@ -9,6 +9,7 @@ import com.facebook.react.bridge.*;
 
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 import java.net.Socket;
 import java.io.OutputStream;
 import java.io.IOException;
@@ -33,6 +34,22 @@ public class TscPrinter {
         String lbGap = options.hasKey("gap")? options.getString("gap"):"GAP 3mm";
         String lbDirection = options.hasKey("direction")? options.getString("direction"):"DIRECTION 1";
         String fontEncoding = options.hasKey("fontEncoding")? options.getString("fontEncoding"):"GB2312";
+        String delay = options.hasKey("delay")? options.getString("delay"):"N";
+        //Log.d("FLG_DELAY",delay);
+        
+        if(delay.equals("Y")){    
+            Log.d("DELAY_GOES_HERE",delay);
+            try{
+                Log.d("MASUK_DELAY","MASUK_DELAY_NIH");
+                long timeToSleep = 1L;
+                TimeUnit time = TimeUnit.SECONDS;
+                time.sleep(timeToSleep);
+            }catch(InterruptedException e){
+                Log.d("INTERUPTED_WHILE_SLEEPING","INTERUPTED_WHILE_SLEEPING");
+            }
+            
+        }
+        
         tsc.addStartCommand(lbSize,lbGap,lbDirection,fontEncoding);
         //tsc.addLabelPositioning("252","210","20");
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
@@ -47,7 +64,6 @@ public class TscPrinter {
                 byte[] temp = t.getBytes(fontEncoding);
                 String temStr = new String(temp, fontEncoding);
                 t = new String(temStr.getBytes(fontEncoding), fontEncoding);//打印的文字
-                Log.d("tscPrinter",t);
             } catch (Exception e) {
                 //promise.reject("INVALID_TEXT", e);
                 //mmSocket.close();

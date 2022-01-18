@@ -9,6 +9,7 @@ import com.facebook.react.bridge.*;
 
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 import java.net.Socket;
 import java.io.OutputStream;
 import java.io.IOException;
@@ -35,6 +36,20 @@ public class BixolonPrinter {
         String fontEncoding = options.hasKey("fontEncoding")? options.getString("fontEncoding"):"GB2312";
         //bixolon.addStartCommand(lbSize,lbGap,lbDirection,fontEncoding);
         //bixolon.addLabelPositioning("252","210","20");
+        String delay = options.hasKey("delay")? options.getString("delay"):"N";
+        
+        if(delay.equals("Y")){    
+            Log.d("DELAY_GOES_HERE",delay);
+            try{
+                Log.d("MASUK_DELAY","MASUK_DELAY_NIH");
+                long timeToSleep = 1L;
+                TimeUnit time = TimeUnit.SECONDS;
+                time.sleep(timeToSleep);
+            }catch(InterruptedException e){
+                Log.d("INTERUPTED_WHILE_SLEEPING","INTERUPTED_WHILE_SLEEPING");
+            }
+            
+        }
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
             String t = text.getString("text");
@@ -47,7 +62,6 @@ public class BixolonPrinter {
                 byte[] temp = t.getBytes(fontEncoding);
                 String temStr = new String(temp, fontEncoding);
                 t = new String(temStr.getBytes(fontEncoding), fontEncoding);//打印的文字
-                Log.d("bixolonPrinter",t);
             } catch (Exception e) {
                 //promise.reject("INVALID_TEXT", e);
                 //mmSocket.close();
