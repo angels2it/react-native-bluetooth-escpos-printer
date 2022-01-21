@@ -35,23 +35,10 @@ public class TscPrinter {
         String lbDirection = options.hasKey("direction")? options.getString("direction"):"DIRECTION 1";
         String fontEncoding = options.hasKey("fontEncoding")? options.getString("fontEncoding"):"GB2312";
         String delay = options.hasKey("delay")? options.getString("delay"):"N";
-        //Log.d("FLG_DELAY",delay);
+        String totalRep = options.hasKey("totalRep")? options.getString("totalRep") : "1";
+        String remainder = options.hasKey("remainder")? options.getString("remainder") : "1";
         
-        if(delay.equals("Y")){    
-            Log.d("DELAY_GOES_HERE",delay);
-            try{
-                Log.d("MASUK_DELAY","MASUK_DELAY_NIH");
-                long timeToSleep = 1L;
-                TimeUnit time = TimeUnit.SECONDS;
-                time.sleep(timeToSleep);
-            }catch(InterruptedException e){
-                Log.d("INTERUPTED_WHILE_SLEEPING","INTERUPTED_WHILE_SLEEPING");
-            }
-            
-        }
-        
-        tsc.addStartCommand(lbSize,lbGap,lbDirection,fontEncoding);
-        //tsc.addLabelPositioning("252","210","20");
+        tsc.addStartCommand(lbSize,lbGap,lbDirection,fontEncoding,remainder);
         for (int i = 0;texts!=null&& i < texts.size(); i++) {
             ReadableMap text = texts.getMap(i);
             String t = text.getString("text");
@@ -60,6 +47,7 @@ public class TscPrinter {
             String y = text.getString("y");
             String fieldBlock = text.hasKey("fieldBlock") ? text.getString("fieldBlock") : "";
             String fontMultiplier = text.hasKey("fontMultiplier") ? text.getString("fontMultiplier"): "1,1";
+            String useCounter = text.hasKey("useCounter") ? text.getString("useCounter") : "N";
             try {
                 byte[] temp = t.getBytes(fontEncoding);
                 String temStr = new String(temp, fontEncoding);
@@ -73,11 +61,11 @@ public class TscPrinter {
             if (fieldBlock!=""){
                 tsc.addFieldBlock(fieldBlock,x,y,fontType,fontMultiplier,t,fontEncoding);
             } else {
-                tsc.addText(x,y,fontType,fontMultiplier,t,fontEncoding);
+                tsc.addText(x,y,fontType,fontMultiplier,t,fontEncoding,useCounter);
             }
             
         }
-        tsc.addEndCommand(fontEncoding);
+        tsc.addEndCommand(fontEncoding, totalRep);
         Vector<Byte> bytes = tsc.getCommand();
         byte[] tosend = new byte[bytes.size()];
         for(int i=0;i<bytes.size();i++){

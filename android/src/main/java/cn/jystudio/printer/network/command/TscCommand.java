@@ -19,7 +19,13 @@ public class TscCommand {
         this.Command = new Vector(4096, 1024);
     }
 
-    public void addStartCommand(String size,String gap, String direction, String fontEncoding) {
+    public void addSetCounter(String fontEncoding, String remainder){
+        String str = new String();
+        str = "SET COUNTER @0 +1\r\n@0=\""+remainder+"\"\r\n";
+        addStrToCommand(str,fontEncoding);
+    }
+    public void addStartCommand(String size,String gap, String direction, String fontEncoding, String remainder) {
+        addSetCounter(fontEncoding, remainder);
         addSize(size,fontEncoding);
         addGap(gap,fontEncoding);
         addDirection(direction,fontEncoding);
@@ -46,19 +52,30 @@ public class TscCommand {
         addStrToCommand(str,fontEncoding);
     }
 
-    public void addPrint(String fontEncoding) {
+    public void addPrint(String fontEncoding, String totalRep) {
         String str = new String();
-        str = "PRINT 1,1\r\n";
+        str = "PRINT "+totalRep+"\r\n";
         addStrToCommand(str,fontEncoding);
     }
 
-    public void addEndCommand(String fontEncoding) {
-        addPrint(fontEncoding);
+    public void addDelay(String fontEncoding) {
+        String str = new String();
+        str = "DELAY 5000\r\n";
+        addStrToCommand(str,fontEncoding);
     }
 
-    public void addText(String x, String y, String type, String multiplier, String text, String fontEncoding) {
+    public void addEndCommand(String fontEncoding, String totalRep) {
+        addPrint(fontEncoding,totalRep);
+        //addDelay(fontEncoding);
+    }
+
+    public void addText(String x, String y, String type, String multiplier, String text, String fontEncoding, String useCounter) {
         String str = new String();
-        str = "TEXT "+x+","+y+",\""+type+"\",0,"+multiplier+",0,"+"\""+text+"\"\r\n";
+        if(useCounter.equals("N")){
+            str = "TEXT "+x+","+y+",\""+type+"\",0,"+multiplier+",0,"+"\""+text+"\"\r\n";
+        } else {
+            str = "TEXT "+x+","+y+",\""+type+"\",0,"+multiplier+",0,"+"@0+\""+text+"\"\r\n";
+        }
         addStrToCommand(str,fontEncoding);
     }
 
