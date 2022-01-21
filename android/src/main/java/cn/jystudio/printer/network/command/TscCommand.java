@@ -64,8 +64,15 @@ public class TscCommand {
         addStrToCommand(str,fontEncoding);
     }
 
+    public void addEoj(String fontEncoding) {
+        String str = new String();
+        str = "EOJ\r\n";
+        addStrToCommand(str,fontEncoding);
+    }
+
     public void addEndCommand(String fontEncoding, String totalRep) {
         addPrint(fontEncoding,totalRep);
+        addEoj(fontEncoding);
         //addDelay(fontEncoding);
     }
 
